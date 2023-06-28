@@ -112,7 +112,7 @@ function App() {
         <h2 className="list-title">완료🎉</h2>
         <div className="list-wrapper">
           {todo.map((item) =>
-            item.done ? (
+            item.isDone ? (
               <div className="todo-container" key={item.id}>
                 <div>
                   <h2 className="todo-title">{item.title}</h2>
