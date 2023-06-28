@@ -13,7 +13,6 @@ function App() {
   ]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [doneTodo, setDoneTodo] = useState([]);
 
   const titleInputHandler = (event) => {
     setTitle(event.target.value);
@@ -36,22 +35,17 @@ function App() {
   };
 
   const deleteTodoHandler = (id) => {
-    const deletedTodo = todo.filter((item) => item.id !== id);
-    setTodo(deletedTodo);
+    const deleteTodo = todo.filter((item) => item.id !== id);
+    setTodo(deleteTodo);
+    console.log("To-do가 삭제되었습니다.");
   };
-  // 호출 될 때마다 isDone 속성 반전
+
   const doneTodoHandler = (id) => {
     const doneTodo = todo.map((item) =>
       item.id === id ? { ...item, isDone: !item.isDone } : item
     );
     setTodo(doneTodo);
-  };
-
-  const cancelDoneHandler = (id) => {
-    const cancelDone = todo.map((item) =>
-      item.id === id ? { ...item, isDone: !item.isDone } : item
-    );
-    setTodo(cancelDone);
+    console.log("To-do가 완료되었습니다.");
   };
 
   return (
@@ -86,58 +80,63 @@ function App() {
         </button>
       </form>
       <div className="list-container">
-        {/* 진행 중 */}
-        <h2 className="list-title">Working🔥</h2>
+        <h2 className="list-title">진행중🔥</h2>
         <div className="list-wrapper">
-          {todo.map((item) => (
-            <div className="todo-container" key={item.id}>
-              <div>
-                <h2 className="todo-title">{item.title}</h2>
-                <div>{item.content}</div>
+          {todo.map((item) =>
+            item.isDone ? (
+              <></>
+            ) : (
+              <div className="todo-container" key={item.id}>
+                <div>
+                  <h2 className="todo-title">{item.title}</h2>
+                  <div>{item.content}</div>
+                </div>
+                <div className="button-set">
+                  <button
+                    className="todo-complete-button button"
+                    onClick={() => doneTodoHandler(item.id)}
+                  >
+                    {item.isDone ? "취소" : "완료"}
+                  </button>
+                  <button
+                    className="todo-delete-button button"
+                    onClick={() => deleteTodoHandler(item.id)}
+                  >
+                    삭제하기
+                  </button>
+                </div>
               </div>
-              <div className="button-set">
-                <button
-                  className="todo-complete-button button"
-                  onClick={() => doneTodoHandler(item.id)}
-                >
-                  {item.isDone ? "취소" : "완료"}
-                </button>
-                <button
-                  className="todo-delete-button button"
-                  onClick={() => deleteTodoHandler(item.id)}
-                >
-                  삭제하기
-                </button>
-              </div>
-            </div>
-          ))}
-          <div className="todo-container" key={item.id}></div>
+            )
+          )}
         </div>
-        {/* 완료목록 */}
-        <h2 className="list-title">Done🎉</h2>
+        <h2 className="list-title">완료🎉</h2>
         <div className="list-wrapper">
-          {doneTodo.map((item) => (
-            <div className="todo-container" key={item.id}>
-              <div>
-                <h2 className="todo-title">{item.title}</h2>
-                <div>{item.content}</div>
+          {todo.map((item) =>
+            item.done ? (
+              <div className="todo-container" key={item.id}>
+                <div>
+                  <h2 className="todo-title">{item.title}</h2>
+                  <div>{item.content}</div>
+                </div>
+                <div className="button-set">
+                  <button
+                    className="todo-complete-button button"
+                    onClick={() => doneTodoHandler(item.id)}
+                  >
+                    취소
+                  </button>
+                  <button
+                    className="todo-delete-button button"
+                    onClick={() => deleteTodoHandler(item.id)}
+                  >
+                    삭제하기
+                  </button>
+                </div>
               </div>
-              <div className="button-set">
-                <button
-                  className="todo-complete-button button"
-                  onClick={() => cancelDoneHandler(item.id)}
-                >
-                  취소
-                </button>
-                <button
-                  className="todo-delete-button button"
-                  onClick={() => deleteTodoHandler(item.id)}
-                >
-                  삭제하기
-                </button>
-              </div>
-            </div>
-          ))}
+            ) : (
+              <></>
+            )
+          )}
         </div>
       </div>
     </div>
