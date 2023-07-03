@@ -1,68 +1,25 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
 
-function ListWrapper({ todo, deleteTodoHandler, doneTodoHandler }) {
-  return (
-    <div className="list-container">
-      <h2 className="list-title">진행중🔥</h2>
-      <div className="list-wrapper">
-        {todo.map((item) =>
-          item.isDone ? (
-            <></>
-          ) : (
-            <div className="todo-container" key={item.id}>
-              <div>
-                <h2 className="todo-title">{item.title}</h2>
-                <div>{item.content}</div>
-              </div>
-              <div className="button-set">
-                <button
-                  className="todo-complete-button button"
-                  onClick={() => doneTodoHandler(item.id)}
-                >
-                  {item.isDone ? "취소" : "완료"}
-                </button>
-                <button
-                  className="todo-delete-button button"
-                  onClick={() => deleteTodoHandler(item.id)}
-                >
-                  삭제하기
-                </button>
-              </div>
-            </div>
-          )
-        )}
-      </div>
-      <h2 className="list-title">완료🎉</h2>
-      <div className="list-wrapper">
-        {todo.map((item) =>
-          item.isDone ? (
-            <div className="todo-container" key={item.id}>
-              <div>
-                <h2 className="todo-title">{item.title}</h2>
-                <div>{item.content}</div>
-              </div>
-              <div className="button-set">
-                <button
-                  className="todo-complete-button button"
-                  onClick={() => doneTodoHandler(item.id)}
-                >
-                  취소
-                </button>
-                <button
-                  className="todo-delete-button button"
-                  onClick={() => deleteTodoHandler(item.id)}
-                >
-                  삭제하기
-                </button>
-              </div>
-            </div>
-          ) : (
-            <></>
-          )
-        )}
-      </div>
-    </div>
-  );
-}
+const StTodos = styled.div`
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+`;
+const StTodo = styled.div`
+	border: 1px solid #ddd;
+	width: 20%;
+	height: 100px;
+	display: flex;
+	align-items: center;
+	padding: 0 24px;
+	border-radius: 12px;
+`;
 
-export default ListWrapper;
+const TodoListContainer = () => {
+	const { todos } = useSelector((state) => state.todos);
+	return <StTodos>{todos.map((todo) => (todo.isDone ? null : <StTodo key={todo.id}>{todo.title}</StTodo>))}</StTodos>;
+};
+
+export default TodoListContainer;
