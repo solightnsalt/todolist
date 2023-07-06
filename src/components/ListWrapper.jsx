@@ -1,14 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTodo, toggleTodo, selectTodo } from "../redux/modules/todos";
+import { deleteTodo, toggleTodo } from "../redux/modules/todos";
 import { useNavigate } from "react-router-dom";
 
 const ListWrapper = () => {
 	const todolist = useSelector((state) => state.todos.todos);
 	// console.log(todolist);
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
 	const DeleteHandler = (id) => {
 		dispatch(deleteTodo(id));
 	};
@@ -16,17 +18,12 @@ const ListWrapper = () => {
 		dispatch(toggleTodo(id));
 	};
 
-	const ClickHandler = (todoId) => {
-		dispatch(selectTodo(todoId)); // 선택한 할 일의 ID 디스패치
-		// 상세 페이지로 이동하는 코드 작성 (예: 라우터 이동)
-	};
-
 	return (
 		<StTodos>
 			<StList>
 				<h1>In progress</h1>
 				{todolist
-					.filter((todo) => !todo.done) // 진행 중인 할 일만 필터링
+					.filter((todo) => !todo.isDone) // 진행 중인 할 일만 필터링
 					.map((todo) => (
 						<StTodo key={todo.id}>
 							<StLink
@@ -34,7 +31,7 @@ const ListWrapper = () => {
 									navigate(`/${todo.id}`);
 								}}>
 								<StTodoTitle>{todo.title}</StTodoTitle>
-								<StTodoContents>{todo.contents}</StTodoContents>
+								<StTodoContents>{todo.content}</StTodoContents>
 							</StLink>
 							<StButtonWrapper>
 								<StButton
@@ -45,7 +42,7 @@ const ListWrapper = () => {
 								<StButton
 									buttoncolor="#bde8e8"
 									onClick={() => ToggleHandler(todo.id)}>
-									{todo.done ? "완료 취소" : "완료"}
+									{todo.isDone ? "완료 취소" : "완료"}
 								</StButton>
 							</StButtonWrapper>
 						</StTodo>
@@ -54,7 +51,7 @@ const ListWrapper = () => {
 			<StList>
 				<h1>Done</h1>
 				{todolist
-					.filter((todo) => todo.done) // 완료된 할 일만 필터링
+					.filter((todo) => todo.isDone) // 완료된 할 일만 필터링
 					.map((todo) => (
 						<StTodo key={todo.id}>
 							<StLink
@@ -62,7 +59,7 @@ const ListWrapper = () => {
 									navigate(`/${todo.id}`);
 								}}>
 								<StTodoTitle>{todo.title}</StTodoTitle>
-								<StTodoContents>{todo.contents}</StTodoContents>
+								<StTodoContents>{todo.content}</StTodoContents>
 							</StLink>
 							<StButtonWrapper>
 								<StButton
@@ -73,7 +70,7 @@ const ListWrapper = () => {
 								<StButton
 									buttoncolor="#bde8e8"
 									onClick={() => ToggleHandler(todo.id)}>
-									{todo.done ? "완료 취소" : "완료"}
+									{todo.isDone ? "완료 취소" : "완료"}
 								</StButton>
 							</StButtonWrapper>
 						</StTodo>

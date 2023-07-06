@@ -1,38 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { getTodoByID } from "../redux/modules/todos.js";
 import Header from "../components/Header";
 
 function Detail() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { id } = useParams();
+	// const todo = useSelector((state) => state.todos.todo);
 	const todo = useSelector((state) => state.todos.todos.find((todo) => todo.id === parseInt(id)));
+
+	// useEffect(() => {
+	// 	dispatch(getTodoByID(id));
+	// }, [dispatch, id]);
+
 	// console.log(id, todo);
 
 	return (
 		<StContainer>
 			<Header />
-
+			<StButton
+				buttoncolor="#d5cbe7"
+				onClick={() => {
+					navigate("/");
+				}}>
+				이전으로
+			</StButton>
 			<StTodo>
-				<StButton
-					buttoncolor="#d5cbe7"
-					onClick={() => {
-						navigate("/");
-					}}>
-					이전으로
-				</StButton>
 				<StTitle>{todo.title}</StTitle>
 				<StContent>{todo.content}</StContent>
-				<StBtnWrapper>
+				{/* <StBtnWrapper>
 					<StButton buttoncolor="#eeb1e6" onClick={() => DeleteHandler(todo.id)}>
 						삭제
 					</StButton>
 					<StButton buttoncolor="#bde8e8" onClick={() => ToggleHandler(todo.id)}>
 						{todo.done ? "완료 취소" : "완료"}
 					</StButton>
-				</StBtnWrapper>
+				</StBtnWrapper> */}
 			</StTodo>
 		</StContainer>
 	);

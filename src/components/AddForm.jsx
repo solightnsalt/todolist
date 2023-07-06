@@ -1,23 +1,43 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { addTodo } from "../redux/modules/todos";
-import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 
 const AddForm = () => {
-	const [title, setTitle] = useState("");
-	const [content, setContent] = useState("");
 	const dispatch = useDispatch();
+	const [todo, setTodo] = useState({
+		id: 0,
+		title: "",
+		content: "",
+		isDone: false,
+	});
+
+	const onChangeHandler = (e) => {
+		const { name, value } = e.target;
+		setTodo({ ...todo, [name]: value });
+	};
 
 	const onSubmitHandler = (e) => {
 		e.preventDefault();
-		if (todo.title.length === 0 || todo.body.length === 0) return alert("내용을 입력해주세요.");
+		if (todo.title.length === 0 || todo.content.length === 0)
+			return alert("내용을 입력해주세요.");
 
-		const newTodo = { id: uuidv4(), title, content, isDone: false };
+		dispatch(
+			addTodo({
+				id: uuidv4(),
+				title: todo.title,
+				content: todo.content,
+				isDone: false,
+			})
+		);
 
-		dispatch(addTodo(newTodo));
-		setTitle("");
-		setContent("");
+		setTodo({
+			id: 0,
+			title: "",
+			content: "",
+			isDone: false,
+		});
 	};
 
 	return (
@@ -26,19 +46,15 @@ const AddForm = () => {
 				type="text"
 				name="title"
 				placeholder="제목을 입력해주세요."
-				value={title}
-				onChange={(e) => {
-					setTitle(e.target.value);
-				}}
+				value={todo.title}
+				onChange={onChangeHandler}
 			/>
 			<StTextarea
 				type="text"
 				name="content"
 				placeholder="내용을 입력해주세요."
-				value={content}
-				onChange={(e) => {
-					setContent(e.target.value);
-				}}
+				value={todo.content}
+				onChange={onChangeHandler}
 			/>
 			<StButton>추가하기</StButton>
 		</StFormWrapper>
